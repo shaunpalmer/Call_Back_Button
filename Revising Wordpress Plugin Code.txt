@@ -1,0 +1,1272 @@
+>> USER: Imagine you were a senior developer at a web company and you were given a small task to try and find out what is wrong with this code hello how would you go about it so can you rewrite this code so it looks like it will work
+ <?php
+/*
+Plugin Name: At Your Tenancy Cleans
+Plugin URI:https://shaunpalmer.co.nz
+Description:Tenancy Cleans Custom Post Type & taxonomies that adds custom post types
+Version: 0.1.9
+Author: shaun palmer
+Author URI: @shaunpalmer.co.nz
+Text Domain: http://shaunpalmer.co.nz
+*Tested up to: 5.1
+ * License: GNU  later - http://www.gnu.org/licenses/gpl-3.0.
+ * @package At Your Services
+*/
+
+*/
+
+// If this file is called directly, abort.
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+*/
+define( 'SP_PS_AT_YOUR_CLEANS_VERSION', '1.1.9' );
+define( 'SP_PS_AT_YOUR_CLEANS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+
+if ( ! function_exists( 'register_at_your_services_post_type' ) ) {
+
+
+
+    function unregister_custom_post_type_on_init() {
+	unregister_post_type( 'tenancy_cleans' );
+}
+add_action( 'init', 'unregister_custom_post_type_on_init' );
+
+// function register_post_type() {
+    function register_tenancy_cleans_post_type() {
+
+      $labels = array(
+		'name'                  => __( 'Tenancy Cleans', 'At-Your-Services' ),
+		'singular_name'         => __( 'Tenancy Clean', 'At-Your-Services' ),
+		'menu_name'             => __( 'Tenancy Cleans', 'At-Your-Services' ),
+		'all_items'             => __( 'All Tenancy Cleans', 'At-Your-Services' ),
+		'add_new'               => __( 'Add New Tenancy Clean', 'At-Your-Services' ),
+		'add_new_item'          => __( 'Add New Tenancy Clean', 'At-Your-Services' ),
+		'edit_item'             => __( 'Edit Tenancy Clean', 'At-Your-Services' ),
+		'new_item'              => __( 'New Tenancy Clean', 'At-Your-Services' ),
+		'view_items'            => __( 'View Tenancy Cleans', 'At-Your-Services' ),
+		'search_items'          => __( 'Search Tenancy Cleans', 'At-Your-Services' ),
+		'not_found'             => __( 'Tenancy Cleans Not Found', 'At-Your-Services' ),
+		'featured_image'        => __( 'Tenancy Clean Image', 'At-Your-Services' ),
+		'set_featured_image'    => __( 'Set Tenancy Clean Image', 'At-Your-Services' ),
+		'remove_featured_image' => __( 'Remove Tenancy Clean Image', 'At-Your-Services' ),
+		'filter_items_list'     => __( 'Filter Tenancy Cleans List', 'At-Your-Services' ),
+		'items_list_navigation' => __( 'Tenancy Cleans Navigation', 'At-Your-Services' ),
+    'items_list'            => __( 'Tenancy Cleans List', 'At-Your-Services' )
+);
+
+
+
+	$args = array(
+		"label" => __( "Tenancy Cleans", "At-Your-Services" ),
+		// "labels" => $labels,
+		"description" => "The different kinds of Tenancy Cleans",
+		"public" => true,
+		"publicly_queryable" => true,
+		"show_ui" => true,
+		//"rest_base" => "",
+		"has_archive" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"exclude_from_search" => false,
+    "capability_type" =>  'post',
+		"map_meta_cap" => true,
+		"hierarchical" => true,
+		"rewrite" => array( "slug" => "Tenancy_Cleans",
+		'show_in_rest' => true,
+		"with_front" => true ),
+		"query_var" => true,
+		"menu_position" => 5,
+    'show_in_rest' => true,
+		"menu_icon" => "dashicons-admin-home",
+		"supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+		"taxonomies" => array( "category", "post_tag", "attachment_category", "attachment_tag", "Type of Services", "location", "price" ),
+        
+    );
+		// Registering your Custom Post Type
+    register_post_type( 'Tenancy_Cleans ', $args );
+}
+add_action( 'init', 'register_tenancy_cleans_post_type' );
+
+}
+
+
+register_uninstall_hook( __FILE__, 'SP_PS_deactivate' ){
+
+function SP_PS_deactivate() {
+    //  force rewrite rules to be deactivate
+    //  at the right time
+    delete_site_option( 'rewrite_rules' );
+}
+/*For the theme: Flush rewrite rules to add "Services" as a permalink slug*/
+};
+
+>> ASSISTANT: There are several issues with this code that need to be addressed before it can work properly. First, there are multiple instances of `*/` which are causing syntax errors. These should be removed.
+
+Second, the `unregister_post_type` function is being called before the `register_tenancy_cleans_post_type` function. This will result in the `tenancy_cleans` post type being unregistered before it can be registered. Instead, you should move the call to `unregister_post_type` after the `register_tenancy_cleans_post_type` function.
+
+Finally, there are a few missing arguments in the `register_post_type` function, such as `$supports` and `$rewrite`. You should add these arguments and assign them appropriate values to ensure that the post type is registered properly.
+
+Here is the revised code:
+
+```
+<?php
+/*
+Plugin Name: At Your Tenancy Cleans
+Plugin URI:https://shaunpalmer.co.nz
+Description:Tenancy Cleans Custom Post Type & taxonomies that adds custom post types
+Version: 0.1.9
+Author: shaun palmer
+Author URI: @shaunpalmer.co.nz
+Text Domain: http://shaunpalmer.co.nz
+*Tested up to: 5.1
+ * License: GNU  later - http://www.gnu.org/licenses/gpl-3.0.
+ * @package At Your Services
+*/
+
+// If this file is called directly, abort.
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+define( 'SP_PS_AT_YOUR_CLEANS_VERSION', '1.1.9' );
+define( 'SP_PS_AT_YOUR_CLEANS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+
+if ( ! function_exists( 'register_at_your_services_post_type' ) ) {
+    function register_tenancy_cleans_post_type() {
+
+      $labels = array(
+		'name'                  => __( 'Tenancy Cleans', 'At-Your-Services' ),
+		'singular_name'         => __( 'Tenancy Clean', 'At-Your-Services' ),
+		'menu_name'             => __( 'Tenancy Cleans', 'At-Your-Services' ),
+		'all_items'             => __( 'All Tenancy Cleans', 'At-Your-Services' ),
+		'add_new'               => __( 'Add New Tenancy Clean', 'At-Your-Services' ),
+		'add_new_item'          => __( 'Add New Tenancy Clean', 'At-Your-Services' ),
+		'edit_item'             => __( 'Edit Tenancy Clean', 'At-Your-Services' ),
+		'new_item'              => __( 'New Tenancy Clean', 'At-Your-Services' ),
+		'view_items'            => __( 'View Tenancy Cleans', 'At-Your-Services' ),
+		'search_items'          => __( 'Search Tenancy Cleans', 'At-Your-Services' ),
+		'not_found'             => __( 'Tenancy Cleans Not Found', 'At
+
+>> USER: As I work on my custom post type for indentical in WordPress plugin I have a suggestion given to me like this
+
+register_uninstall_hook( __FILE__, 'SP_PS_unregister_custom_post_type_on_init' ){
+ 
+//  function SP_PS_deactivate() {
+//   force rewrite rules to be deactivate
+  //  at the right time
+	IF(isset($wp_post_types["tenancy_cleans"])){
+	 unregister_post_type( 'tenancy_cleans' );
+   delete_site_option( 'rewrite_rules' );
+ },
+/*For the theme: Flush rewrite rules to add "Services" as a permalink slug*/
+};
+add_action( 'init', 'SP_PS_unregister_custom_post_type_on_init',100 );
+
+//add_action( 'init', 'SP_PS_unregister_custom_post_type_on_init',100 );
+
+//add_action( 'init', 'SP_PS_unregister_custom_post_type_on_init',100 );
+
+can you take a look and tell me what you think's going on here?
+
+>> ASSISTANT: It appears that the code you provided is intended to unregister the `tenancy_cleans` custom post type and delete the rewrite rules on plugin uninstall.
+
+The `register_uninstall_hook` function is called with two arguments: the file path of the plugin and the function to be run when the plugin is uninstalled. In this case, the function being called is `SP_PS_unregister_custom_post_type_on_init`.
+
+The `SP_PS_unregister_custom_post_type_on_init` function first checks if the `tenancy_cleans` post type is set. If it is, the post type is unregistered using the `unregister_post_type` function and the rewrite rules are deleted using the `delete_site_option` function.
+
+Finally, the `SP_PS_unregister_custom_post_type_on_init` function is hooked to the `init` action with a priority of 100 using the `add_action` function. This means that the function will be run when the `init` action is triggered, with a priority of 100.
+
+Overall, it seems that this code is intended to properly unregister the `tenancy_cleans` custom post type and delete the rewrite rules when the plugin is uninstalled. However, there are a few issues with the code that you should be aware of:
+
+- The `SP_PS_deactivate` function is never called, so the code within it will never be executed.
+- The `SP_PS_unregister_custom_post_type_on_init` function is called three times, with the same arguments each time. This is unnecessary and may cause issues if the function has unintended side effects.
+- The `IF` statement within the `SP_PS_unregister_custom_post_type_on_init` function is missing a closing parenthesis. This will cause a syntax error.
+
+To fix these issues, you should remove the extra calls to `add_action` and `SP_PS_unregister_custom_post_type_on_init`, and add the missing parenthesis to the `IF` statement. Here is the revised code:
+
+```
+register_uninstall_hook( __FILE__, 'SP_PS_unregister_custom_post_type_on_init' );
+
+function SP_PS_unregister_custom_post_type_on_init() {
+  if (isset($wp_post_types["tenancy_cleans"])) {
+    unregister_post_type( 'tenancy_cleans' );
+    delete_site_option( 'rewrite_rules' );
+  }
+}
+
+add_action( 'init', 'SP_PS_unregister_custom_post_type_on_init', 100 );
+```
+
+>> USER: Fatal error: Uncaught Error: syntax error, unexpected '"services"' (T_CONSTANT_ENCAPSED_STRING), expecting variable (T_VARIABLE)
+in C:\Bitnami\wordpress-5.7-0\apps\wordpress\htdocs\wp-content\plugins\AtYourServices\AtYourServices.php on line 53
+
+<?php
+/*
+Plugin Name: At Your Services
+Plugin URI:https://shaunpalmer.co.nz
+Description:Services Custom Post Type & taxonomies that adds custom post types
+Version: 0.1.9
+Author: shaun palmer
+Author URI: @shaunpalmer.co.nz
+Text Domain: http://shaunpalmer.co.nz
+*Tested up to: 5.1
+ * License: GNU  later - http://www.gnu.org/licenses/gpl-3.0.
+ * @package At Your Services
+*/
+
+/*  Copyright 2018  SHAUN PAMLER  (email : shaun.palmer@gmail.com)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License, version 2, as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+// If this file is called directly, abort.
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
+define( 'SP_PS_AT_YOUR_SERVICES_VERSION', '0.1.9' );
+define( 'SP_PS_AT_YOUR_SERVICES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+
+if ( ! function_exists( 'register_at_your_services_post_type' ) ) {
+
+/**
+	 * Register the 'services' custom post type.
+	 */
+
+function SP_PS_register_AtYourServices() {
+
+
+	 /* Post Type: Services.
+	 that adds custom post types
+	 */
+function register_post_type( "services", $args );
+// Set UI labels for Custom Post Type
+	$labels = array(
+		"name" => __( "Services", "at-your-services" ),
+		"singular_name" => __( "Service", "at-your-services" ),
+		"menu_name" => __( "Services", "at-your-services" ),
+		"all_items" => __( "All Services", "at-your-services" ),
+		"add_new" => __( "Add New types of Services", "at-your-services" ),
+		"add_new_item" => __( "Add New types of Services", "at-your-services" ),
+		"edit_item" => __( "Edit  Services", "at-your-services" ),
+		"new_item" => __( "New Services", "at-your-services" ),
+		"view_items" => __( "View Services", "at-your-services" ),
+		"search_items" => __( "Search Services Type", "at-your-services" ),
+		"not_found" => __( "Services Not Found", "at-your-services" ),
+		"featured_image" => __( "Services Image", "at-your-services" ),
+		"set_featured_image" => __( "Set Featured Image of the Services", "at-your-services" ),
+		"remove_featured_image" => __( "Remove Featured Image of the Services", "at-your-services" ),
+		"filter_items_list" => __( "Filter List Services", "at-your-services" ),
+		"items_list_navigation" => __( "service", "at-your-services" ),
+		"items_list" => __( "List Services", "at-your-services" ),
+		"attributes" => __( "Order of Services", "at-your-services" ),
+    ),
+
+
+	$args = array(
+		"label" => __( "Services", "At-Your-Services" ),
+		"labels" => $labels,
+		"description" => "The different kinds of services",
+		"public" => true,
+		"publicly_queryable" => true,
+		"show_ui" => true,
+		//"rest_base" => "",
+		"has_archive" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"exclude_from_search" => false,
+		"capability_type" => "page","Post",
+		"map_meta_cap" => true,
+		"hierarchical" => true,
+		"rewrite" => array( "slug" => "services",
+		'show_in_rest' => true,
+		"with_front" => true ),
+		"query_var" => true,
+		"menu_position" => 5,
+        'show_in_rest' => true,
+		"menu_icon" => "dashicons-admin-users",
+		"supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+		"taxonomies" => array( "category", "post_tag", "attachment_category", "attachment_tag", "Type of Services", "location", "price" ),
+    
+    
+	);
+
+    
+
+  // Team Custome type
+  function register_post_type( 'our-teams',)
+      array(
+          'labels' => array(
+              'name' => __( 'Teams' , 'At-Your-Services'),
+              'singular_name' => __( 'Team', 'At-Your-Services' ),
+              'add_new' => __( "Add New a team member", "At-Your-Service" ),
+              'featured_image' => __( "Team Member Image", "At-Your-Service" ),
+              'set_featured_image' => __( "Set Featured Image of the New team member", "At-Your-Service" ),
+              'remove_featured_image' => __( 'Remove Team Member Image', 'At-Your-Services' ),
+              'edit_item' => __( 'Edit  Team members', 'At-Your-Service' ),
+              'new_item' => __( 'New Team member', 'At-Your-Service' ),
+              'view_item' => __( 'View Team member', 'At-Your-Service' ),
+              'view_items' => __( 'View Team members', 'At-Your-Service' ),
+          ),
+          'public' => true,
+          'featured_image'=>true,
+          "description" => "adding team members descriptions",
+          'has_archive' => true,
+          'show_in_menu' => true,
+          'show_in_nav_menus' => true,
+          'show_ui' => true,
+          'exclude_from_search' => false,
+          'show_in_quick_edit' => true,
+          'capability_type' => 'page','post',
+          'show_in_rest' => true,
+		  'can_export' => true,
+          'show_admin_column' => true,
+          'menu_icon' => 'dashicons-groups', //  The url to the icon to be used for this menu or the name of the icon from the iconfont
+          "supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+          "taxonomies" => array( "category", "post_tag", "attachment_category", "attachment_tag", "Type of Services", "location", "price" ),
+      )
+  );
+
+  // FAQ Custome type
+  function register_post_type( 'our-faq',){
+      array(
+          'labels' => array(
+              'name' => __( 'FAQs' , 'At-Your-Services'),
+              'singular_name' => __( 'FAQ', 'At-Your-Services' )
+          ),
+
+          'public' => true,
+          'featured_image'=>true,
+          'has_archive' => true,
+          'show_in_menu' => true,
+          'show_admin_column' => true,
+          'show_in_nav_menus' => true,
+          'exclude_from_search' => false,
+          'capability_type' => 'page','post',
+          'show_in_rest' => true,
+          'can_export' => true,
+          'capability_type' => 'page','post',
+          'menu_icon' => 'dashicons-format-status', //  The url to the icon to be used for this menu or the name of the icon from the iconfont
+         "supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+      )
+  );
+  }
+
+  // Reviews Custome type
+  register_post_type( 'our-reviews'){
+      array(
+              'labels' => array(
+              'name' => __( 'Reviews' , 'At-Your-Services'),
+              'singular_name' => __( 'Reviews', 'At-Your-Services' ),
+              'menu_name' => __( 'Reviews', '' ),
+              'all_items' => __( 'All Reviews', '' ),
+              'add_new' => __( 'Add New Review', '' ),
+              'add_new_item' => __( 'Add New Review', '' ),
+              'edit_item' => __( 'Edit  Reviews', '' ),
+              'new_item' => __( 'New Reviews', '' ),
+              'view_item' => __( 'View Reviews', '' ),
+              'view_items' => __( 'View Reviews', '' ),
+              'search_items' => __( 'Search A Reviews ', '' ),
+              'not_found' => __( 'Reviews Not Found', '' ),
+              'featured_image' => __( 'Reviews Image', '' ),
+              'set_featured_image' => __( 'Set Featured Image of the Reviews', '' ),
+              'remove_featured_image' => __( 'Remove Featured Image of the Reviews', '' ),
+              'filter_items_list' => __( 'Filter List Reviews', '' ),
+
+          ),
+          'public' => true,
+          'featured_image'=>true,
+          'has_archive' => true,
+          'publicly_queryable' => true,
+      	  'show_ui' => true,
+      	  'show_in_rest' => false,
+      	  'has_archive' => false,
+      	  'show_in_menu' => true,
+          'show_admin_column' => true,
+      	  'show_in_nav_menus' => true,
+      	  'exclude_from_search' => false,
+          'capability_type' => array('page', 'post'),
+          'show_in_rest' => true,
+          'can_export' => true,
+          'menu_icon' => 'dashicons-format-chat', //  The url to the icon to be used for this menu or the name of the icon from the iconfont
+          'supports' => array("title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats"),
+      )
+  );
+  }
+
+// Hooking up our function to theme setup
+add_action( 'init', 'SP_PS_register_AtYourServices' );
+
+
+
+// Custom Taxonomies
+function SP_PS_register_AtYourServices_taxonomies() {
+
+    // Type of Service taxonomy
+    $labels = array(
+		'name'              => 'Type of Services',
+        'singular_name'     => 'Type of Service',
+        'search_items'      => 'Search Types of Services',
+        'all_items'         => 'All Types of Services',
+        'parent_item'       => 'Parent Type of Service',
+        'parent_item_colon' => 'Parent Type of Service:',
+        'edit_item'         => 'Edit Type of Service',
+        'update_item'       => 'Update Type of Service',
+        'add_new_item'      => 'Add New Type of Service',
+        'new_item_name'     => 'New Type of Service Name',
+        'menu_name'         => 'Type of Service',
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'services' ),
+        'show_in_rest'		=> true,
+    );
+
+    register_taxonomy( 'service_type', array( 'services', 'page' ), $args );
+
+
+
+}
+	add_action( 'init', 'SP_PS_register_AtYourServices_taxonomies' );
+
+	// Price Range taxonomy
+	function SP_PS_register_AtYourServices_Price() {
+
+    $labels = array(
+        'name'              => 'Price Ranges',
+        'singular_name'     => 'Price Range',
+        'search_items'      => 'Search Price Ranges',
+        'all_items'         => 'All Price Ranges',
+        'parent_item'       => 'Parent Price Range',
+        'parent_item_colon' => 'Parent Price Range:',
+        'edit_item'         => 'Edit Price Range',
+        'update_item'       => 'Update Price Range',
+        'add_new_item'      => 'Add New Price Range',
+        'new_item_name'     => 'New Price Range Name',
+        'menu_name'         => 'Price Range',
+		"items_list_navigation" =>  'Price',
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+				'show_in_menu' 			=> true,
+				'show_in_nav_menus' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'prices' ),
+				'show_in_rest'	  	=> true,
+    );
+
+    register_taxonomy( 'price', array( 'Services' ), $args );
+
+}
+}
+add_action( 'init', 'SP_PS_register_AtYourServices_Price' );
+
+
+register_uninstall_hook( __FILE__, 'unregister_custom_post_type_on_init' );
+
+function unregister_custom_post_type_on_init() {
+  if (isset($wp_post_types['Services'])) {
+    unregister_post_type( 'Services' );
+    delete_site_option( 'rewrite_rules' );
+  }
+}
+
+add_action( 'init', 'unregister_custom_post_type_on_init', 100 );
+
+/*For the theme: Flush rewrite rules to add "Services" as a permalink slug*/
+
+	?>
+
+
+
+an you take a look and tell me what you think's going on here?
+
+>> ASSISTANT: It looks like there is a syntax error on line 53 of your code. The error message states that there is an unexpected string (`"services"`) in the code, and that a variable was expected instead.
+
+This error is likely caused by the fact that the `register_post_type` function is being called with a string as the first argument, instead of a label array.
+
+To fix this issue, you should pass the `$labels` array as the first argument to the `register_post_type` function, like this:
+
+```
+function SP_PS_register_AtYourServices() {
+  // Set UI labels for Custom Post Type
+  $labels = array(
+    "name" => __( "Services", "at-your-services" ),
+    // ...
+  );
+
+  $args = array(
+    // ...
+  );
+
+  register_post_type( $labels, $args );
+}
+```
+
+Additionally, you should remove the `function register_post_type( "services", $args );` line, as it is not being used and is causing a syntax error.
+
+>> USER: Does that look better now can you tell me what's going on in this code?
+
+
+function register_post_type( "services", $args ){
+// Set UI labels for Custom Post Type
+	$labels = array(
+		"name" => __( "Services", "at-your-services" ),
+		"singular_name" => __( "Service", "at-your-services" ),
+		"menu_name" => __( "Services", "at-your-services" ),
+		"all_items" => __( "All Services", "at-your-services" ),
+		"add_new" => __( "Add New types of Services", "at-your-services" ),
+		"add_new_item" => __( "Add New types of Services", "at-your-services" ),
+		"edit_item" => __( "Edit  Services", "at-your-services" ),
+		"new_item" => __( "New Services", "at-your-services" ),
+		"view_items" => __( "View Services", "at-your-services" ),
+		"search_items" => __( "Search Services Type", "at-your-services" ),
+		"not_found" => __( "Services Not Found", "at-your-services" ),
+		"featured_image" => __( "Services Image", "at-your-services" ),
+		"set_featured_image" => __( "Set Featured Image of the Services", "at-your-services" ),
+		"remove_featured_image" => __( "Remove Featured Image of the Services", "at-your-services" ),
+		"filter_items_list" => __( "Filter List Services", "at-your-services" ),
+		"items_list_navigation" => __( "service", "at-your-services" ),
+		"items_list" => __( "List Services", "at-your-services" ),
+		"attributes" => __( "Order of Services", "at-your-services" ),
+    ),
+
+
+	$args = array(
+		"label" => __( "Services", "At-Your-Services" ),
+		"labels" => $labels,
+		"description" => "The different kinds of services",
+		"public" => true,
+		"publicly_queryable" => true,
+		"show_ui" => true,
+		//"rest_base" => "",
+		"has_archive" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"exclude_from_search" => false,
+		"capability_type" => "page","Post",
+		"map_meta_cap" => true,
+		"hierarchical" => true,
+		"rewrite" => array( "slug" => "services",
+		'show_in_rest' => true,
+		"with_front" => true ),
+		"query_var" => true,
+		"menu_position" => 5,
+        'show_in_rest' => true,
+		"menu_icon" => "dashicons-admin-users",
+		"supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+		"taxonomies" => array( "category", "post_tag", "attachment_category", "attachment_tag", "Type of Services", "location", "price" ),
+    
+    
+	);
+}
+
+>> ASSISTANT: It looks like this code is defining a custom post type in WordPress called "services". The custom post type has several labels defined in the `$labels` array, which are used to customize the text displayed in the WordPress admin interface for this post type.
+
+The `$args` array contains several arguments that control the behavior of the custom post type. For example, the `"public"` argument determines whether the post type should be publicly visible or not, and the `"supports"` argument specifies which features the post type should support (e.g. title, editor, thumbnail).
+
+The `register_post_type` function is called at the end of the code block to register the custom post type with WordPress. However, this code will not work as-is because the function is being called with a string as the first argument instead of the `$labels` array.
+
+To fix this issue, you should pass the `$labels` array as the first argument to the `register_post_type` function, like this:
+
+```
+register_post_type( $labels, $args );
+```
+
+>> USER: Fatal error: Uncaught Error: syntax error, unexpected '"services"' (T_CONSTANT_ENCAPSED_STRING), expecting variable (T_VARIABLE)
+in C:\Bitnami\wordpress-5.7-0\apps\wordpress\htdocs\wp-content\plugins\AtYourServices\AtYourServices.php on line 53
+
+function register_post_type( "services", $args ){
+
+// Set UI labels for Custom Post Type
+ register_post_type( $labels, $args );
+	$labels = array(
+		"name" => __( "Services", "at-your-services" ),
+		"singular_name" => __( "Service", "at-your-services" ),
+		"menu_name" => __( "Services", "at-your-services" ),
+		"all_items" => __( "All Services", "at-your-services" ),
+		"add_new" => __( "Add New types of Services", "at-your-services" ),
+		"add_new_item" => __( "Add New types of Services", "at-your-services" ),
+		"edit_item" => __( "Edit  Services", "at-your-services" ),
+		"new_item" => __( "New Services", "at-your-services" ),
+		"view_items" => __( "View Services", "at-your-services" ),
+		"search_items" => __( "Search Services Type", "at-your-services" ),
+		"not_found" => __( "Services Not Found", "at-your-services" ),
+		"featured_image" => __( "Services Image", "at-your-services" ),
+		"set_featured_image" => __( "Set Featured Image of the Services", "at-your-services" ),
+		"remove_featured_image" => __( "Remove Featured Image of the Services", "at-your-services" ),
+		"filter_items_list" => __( "Filter List Services", "at-your-services" ),
+		"items_list_navigation" => __( "service", "at-your-services" ),
+		"items_list" => __( "List Services", "at-your-services" ),
+		"attributes" => __( "Order of Services", "at-your-services" ),
+    ),
+
+
+	$args = array(
+		"label" => __( "Services", "At-Your-Services" ),
+		"labels" => $labels,
+		"description" => "The different kinds of services",
+		"public" => true,
+		"publicly_queryable" => true,
+		"show_ui" => true,
+		//"rest_base" => "",
+		"has_archive" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"exclude_from_search" => false,
+		"capability_type" => "page","Post",
+		"map_meta_cap" => true,
+		"hierarchical" => true,
+		"rewrite" => array( "slug" => "services",
+		'show_in_rest' => true,
+		"with_front" => true ),
+		"query_var" => true,
+		"menu_position" => 5,
+        'show_in_rest' => true,
+		"menu_icon" => "dashicons-admin-users",
+		"supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+		"taxonomies" => array( "category", "post_tag", "attachment_category", "attachment_tag", "Type of Services", "location", "price" ),
+    
+    
+	);
+}
+
+after trying your fix I think I messed up somewhere what's going on?
+
+>> ASSISTANT: It looks like there is a syntax error in the function `register_post_type()`. The correct syntax for this function is `register_post_type( $post_type, $args )`, where `$post_type` is the name of the post type you want to register and `$args` is an array of arguments for the post type.
+
+In the code you provided, you are trying to pass the `$args` array as the first argument and the `$labels` array as the second argument, which is incorrect. To fix this error, try rearranging the arguments as follows:
+
+```
+register_post_type( 'services', array(
+	'labels' => $labels,
+	'public' => true,
+	'publicly_queryable' => true,
+	'show_ui' => true,
+	'has_archive' => true,
+	'show_in_menu' => true,
+	'show_in_nav_menus' => true,
+	'exclude_from_search' => false,
+	'capability_type' => 'page',
+	'map_meta_cap' => true,
+	'hierarchical' => true,
+	'rewrite' => array( 'slug' => 'services', 'show_in_rest' => true, 'with_front' => true ),
+	'query_var' => true,
+	'menu_position' => 5,
+	'show_in_rest' => true,
+	'menu_icon' => 'dashicons-admin-users',
+	'supports' => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes', 'post-formats', 'block-style', 'block-templates' ),
+	'taxonomies' => array( 'category', 'post_tag', 'attachment_category', 'attachment_tag', 'Type of Services', 'location', 'price' ),
+) );
+```
+
+>> USER: add action at the end of the   " Services"
+// Hooking up our function to Plugin  setup
+add_action( 'init',   " " )
+
+>> ASSISTANT: It looks like you are trying to add an action to initialize your custom post type, but you haven't specified a function to run. You can do this by replacing " " with the name of your function, for example:
+
+add_action( 'init', 'register_at_your_services_post_type' );
+
+This will call the function 'register_at_your_services_post_type' when the 'init' action is triggered. Make sure that the function is defined before this line of code is executed.
+
+>> USER: function SP_PS_register_AtYourServices() {
+
+register_post_type( 'services', array(
+	'labels' => $labels,
+	'public' => true,
+	'publicly_queryable' => true,
+	'show_ui' => true,
+	'has_archive' => true,
+	'show_in_menu' => true,
+	'show_in_nav_menus' => true,
+	'exclude_from_search' => false,
+	'capability_type' => 'page',
+	'map_meta_cap' => true,
+	'hierarchical' => true,
+	'rewrite' => array( 'slug' => 'services', 'show_in_rest' => true, 'with_front' => true ),
+	'query_var' => true,
+	'menu_position' => 5,
+	'show_in_rest' => true,
+	'menu_icon' => 'dashicons-admin-users',
+	'supports' => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes', 'post-formats', 'block-style', 'block-templates' ),
+	'taxonomies' => array( 'category', 'post_tag', 'attachment_category', 'attachment_tag', 'Type of Services', 'location', 'price' ),
+) );
+
+$args = array(
+		"label" => __( "Services", "At-Your-Services" ),
+		"labels" => $labels,
+		"description" => "The different kinds of services",
+		"public" => true,
+		"publicly_queryable" => true,
+		"show_ui" => true,
+		//"rest_base" => "",
+		"has_archive" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"exclude_from_search" => false,
+		"capability_type" => "page","Post",
+		"map_meta_cap" => true,
+		"hierarchical" => true,
+		"rewrite" => array( "slug" => "services",
+		'show_in_rest' => true,
+		"with_front" => true ),
+		"query_var" => true,
+		"menu_position" => 5,
+        'show_in_rest' => true,
+		"menu_icon" => "dashicons-admin-users",
+		"supports" => array( "title", "editor", "thumbnail", "excerpt", "custom-fields", "revisions", "page-attributes","post-formats","Block-style","Block-templates" ),
+		"taxonomies" => array( "category", "post_tag", "attachment_category", "attachment_tag", "Type of Services", "location", "price" ),
+        
+    
+	);
+}
+  add_action( 'init', 'SP_PS_register_AtYourServices' );
+working on my WordPress plugin
+what's going on here does this look correct?
+
+
+>> ASSISTANT: Yes, it looks correct. The function `SP_PS_register_AtYourServices()` is defining a custom post type called 'services' using the `register_post_type()` function and then adding it to WordPress using the `add_action()` function. The 'services' custom post type will have the labels and other arguments specified in the `$labels` and `$args` arrays.
+
+>> USER: register_taxonomy( 'service_type', array( 'services', 'page' ), $args );
+
+
+
+}
+	add_action( 'init', 'SP_PS_register_AtYourServices_taxonomies' );
+
+	// Price Range taxonomy
+	function SP_PS_register_AtYourServices_Price() {
+
+    $labels = array(
+        'name'              => 'Price Ranges',
+        'singular_name'     => 'Price Range',
+        'search_items'      => 'Search Price Ranges',
+        'all_items'         => 'All Price Ranges',
+        'parent_item'       => 'Parent Price Range',
+        'parent_item_colon' => 'Parent Price Range:',
+        'edit_item'         => 'Edit Price Range',
+        'update_item'       => 'Update Price Range',
+        'add_new_item'      => 'Add New Price Range',
+        'new_item_name'     => 'New Price Range Name',
+        'menu_name'         => 'Price Range',
+		"items_list_navigation" =>  'Price',
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+				'show_in_menu' 			=> true,
+				'show_in_nav_menus' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'prices' ),
+				'show_in_rest'	  	=> true,
+    );
+
+    register_taxonomy( 'price', array( 'Services' ), $args );
+
+}
+}
+add_action( 'init', 'SP_PS_register_AtYourServices_Price' );
+
+
+I wanna add taxonomy for this custom post type does this look correct?
+
+>> ASSISTANT: This code looks like it is attempting to register two taxonomies for the custom post type "services": "service_type" and "price". 
+
+The first taxonomy, "service_type", is being registered with the `register_taxonomy()` function, which is correct. The arguments passed to the function seem to be missing the labels and description for the taxonomy, however. You may want to include those as well.
+
+The second taxonomy, "price", is being registered in a similar way to the first, with the correct function and the necessary labels and arguments. 
+
+It is also worth noting that in both cases, the second argument passed to the `register_taxonomy()` function (`array( 'services', 'page' )` for the first taxonomy, and `array( 'Services' )` for the second) specifies which post types the taxonomy should be associated with. In this case, the first taxonomy is associated with both the "services" custom post type and the "page" post type, while the second taxonomy is only associated with the "Services" post type (note the capital "S" in "Services").
+
+Overall, the code looks correct, although you may want to add labels and a description for the "service_type" taxonomy, and double check that you want the "price" taxonomy to only be associated with the "Services" post type (with a capital "S").
+
+>> USER: Does this look correct for the price taxonomy
+
+
+>> ASSISTANT: It looks like the code to register the 'price' taxonomy is correct. 
+
+However, there are a few issues with the code above:
+
+1. The function `SP_PS_register_AtYourServices_taxonomies()` is defined, but it is never called.
+2. The `SP_PS_register_AtYourServices_Price()` function is missing an opening curly brace `{` before the `$labels` variable is defined.
+3. The closing curly brace `}` at the very end of the code block is not indented correctly. It should be indented to the same level as the opening brace of the `SP_PS_register_AtYourServices_Price()` function.
+
+Here is the corrected code:
+
+```
+function SP_PS_register_AtYourServices_Price() {
+
+$labels = array(
+    'name'              => 'Price Ranges',
+    'singular_name'     => 'Price Range',
+    'search_items'      => 'Search Price Ranges',
+    'all_items'         => 'All Price Ranges',
+    'parent_item'       => 'Parent Price Range',
+    'parent_item_colon' => 'Parent Price Range:',
+    'edit_item'         => 'Edit Price Range',
+    'update_item'       => 'Update Price Range',
+    'add_new_item'      => 'Add New Price Range',
+    'new_item_name'     => 'New Price Range Name',
+    'menu_name'         => 'Price Range',
+    "items_list_navigation" =>  'Price',
+);
+
+$args = array(
+    'hierarchical'      => true,
+    'labels'            => $labels,
+    'show_ui'           => true,
+    'show_admin_column' => true,
+    'show_in_menu'      => true,
+    'show_in_nav_menus' => true,
+    'query_var'         => true,
+    'rewrite'           => array( 'slug' => 'prices' ),
+    'show_in_rest'      => true,
+);
+
+register_taxonomy( 'price', array( 'Services' ), $args );
+
+}
+
+add_action( 'init', 'SP_PS_register_AtYourServices_Price' );
+```
+
+>> USER: 	// Price Range taxonomy
+	function SP_PS_register_AtYourServices_Price() {
+
+    $labels = array(
+        'name'              => 'Price Ranges',
+        'singular_name'     => 'Price Range',
+        'search_items'      => 'Search Price Ranges',
+        'all_items'         => 'All Price Ranges',
+        'parent_item'       => 'Parent Price Range',
+        'parent_item_colon' => 'Parent Price Range:',
+        'edit_item'         => 'Edit Price Range',
+        'update_item'       => 'Update Price Range',
+        'add_new_item'      => 'Add New Price Range',
+        'new_item_name'     => 'New Price Range Name',
+        'menu_name'         => 'Price Range',
+		"items_list_navigation" =>  'Price',
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+		'show_in_menu' 			=> true,
+		'show_in_nav_menus' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'prices' ),
+		'show_in_rest'	  	=> true,
+    );
+
+    register_taxonomy( 'price', array( 'Services' ), $args );
+
+}
+}
+add_action( 'init', 'SP_PS_register_AtYourServices_Price' );
+
+Does this look correct for the price taxonomy?
+
+>> ASSISTANT: The code appears to define a function called `SP_PS_register_AtYourServices_Price` that registers a taxonomy called "price" for the custom post type "Services". There are two issues that I can see with this code:
+
+1. There is an extra closing curly brace (`}`) at the end of the function definition. This should be removed.
+
+2. The taxonomy is being registered for a single custom post type, "Services", which is correct. However, the `$args` array passed to `register_taxonomy` should also include a `'labels'` key with an array of labels for the taxonomy. This is important because it allows you to customize the labels used in the WordPress admin interface when managing the taxonomy. Here is an example of how you could add labels to the `$args` array:
+
+```
+$args = array(
+    // ...
+    'labels' => array(
+        'name' => __( 'Price Ranges', 'at-your-services' ),
+        'singular_name' => __( 'Price Range', 'at-your-services' ),
+        // ...
+    ),
+    // ...
+);
+```
+
+Once you've made these changes, the code should be correct for registering the "price" taxonomy for the "Services" custom post type.
+
+>> USER: // Custom  Services Taxonomies
+function SP_PS_register_AtYourServices_taxonomies() {
+
+    // Type of Service taxonomy
+    $labels = array(
+		'name'              => 'Type of Services',
+        'singular_name'     => 'Type of Service',
+        'search_items'      => 'Search Types of Services',
+        'all_items'         => 'All Types of Services',
+        'parent_item'       => 'Parent Type of Service',
+        'parent_item_colon' => 'Parent Type of Service:',
+        'edit_item'         => 'Edit Type of Service',
+        'update_item'       => 'Update Type of Service',
+        'add_new_item'      => 'Add New Type of Service',
+        'new_item_name'     => 'New Type of Service Name',
+        'menu_name'         => 'Type of Service',
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'services' ),
+        'show_in_rest'		=> true,
+    );
+
+    register_taxonomy( 'service_type', array( 'services', 'page' ), $args );
+
+
+
+}
+	add_action( 'init', 'SP_PS_register_AtYourServices_taxonomies' );
+
+working on my WordPress plugin
+what's going on here?
+Does this look correct?
+
+
+
+
+>> ASSISTANT: It looks like you have defined a function called `SP_PS_register_AtYourServices_taxonomies` that registers a custom taxonomy called "Type of Services" for your custom post type "services". It appears that this code should be functional, but there are a few things you might want to consider:
+
+1. In the `$labels` array, you have defined a label called `'items_list_navigation'`. This label is not used by WordPress when registering custom taxonomies. You can remove this label if you don't need it.
+
+2. In the `$args` array, you have defined a `'show_in_rest'` argument and set it to `true`. This will enable the taxonomy to be visible in the WordPress REST API. If you don't plan on using the REST API, you can remove this argument.
+
+3. You have defined the taxonomy to be registered for the "services" and "page" post types, but it is not clear why you would want to associate this taxonomy with the "page" post type. If you only want to use this taxonomy for the "services" post type, you should change the `'service', 'page'` argument to just `'services'`.
+
+4. You have added an extra curly brace `}` after the function definition. This brace is not needed and can be removed.
+
+Other than these minor issues, the code looks fine and should work as expected. I hope this helps! Let me know if you have any other questions.
+
+>> USER: Can you go go ahead and refactor this I'd like to see how this is done?
+
+>> ASSISTANT: Certainly! Here is how you can refactor the code:
+
+First, you can move all the labels and arguments arrays outside of the `SP_PS_register_AtYourServices` function. This way, you can reuse these arrays for both the post type and taxonomy registration.
+
+```
+$labels = array(
+	"name" => __( "Services", "at-your-services" ),
+	"singular_name" => __( "Service", "at-your-services" ),
+	"menu_name" => __( "Services", "at-your-services" ),
+	"all_items" => __( "All Services", "at-your-services" ),
+	"add_new" => __( "Add New types of Services", "at-your-services" ),
+	"add_new_item" => __( "Add New types of Services", "at-your-services" ),
+	"edit_item" => __( "Edit  Services", "at-your-services" ),
+	"new_item" => __( "New Services", "at-your-services" ),
+	"view_items" => __( "View Services", "at-your-services" ),
+	"search_items" => __( "Search Services Type", "at-your-services" ),
+	"not_found" => __( "Services Not Found", "at-your-services" ),
+	"featured_image" => __( "Services Image", "at-your-services" ),
+	"set_featured_image" => __( "Set Featured Image of the Services", "at-your-services" ),
+	"remove_featured_image" => __( "Remove Featured Image of the Services", "at-your-services" ),
+	"filter_items_list" => __( "Filter List Services", "at-your-services" ),
+	"items_list_navigation" => __( "service", "at-your-services" ),
+	"items_list" => __( "List Services", "at-your-services" ),
+	"attributes" => __( "Order of Services", "at-your-services" ),
+);
+
+$args = array(
+	"label" => __( "Services", "At-Your-Services" ),
+	"labels" => $labels,
+	"description" => "The different kinds of services",
+	"public" => true,
+	"publicly_queryable" => true,
+	"show_ui" => true,
+	"has_archive" => true,
+	"show_in_menu" => true,
+	"show_in_nav_menus" => true,
+	"exclude_from_search" => false,
+	"capability_type" => "page","Post",
+	"map_meta_cap" => true,
+	"hierarchical" => true,
+	"rewrite" => array( "slug" => "services", "show_in_rest" => true, "with_front" => true ),
+	"query_var" => true,
+	"menu_position" => 5,
+	"show_in_rest" => true,
+	"menu_icon" => "dashicons-admin-users",
+	"supports" => array( "title", "editor", "thumbnail", "excerpt
+
+>> USER: Really are you absolutely sure   You have added an extra curly brace } after the function definition. This brace is not needed and can be removed.  
+
+function SP_PS_register_AtYourServices_taxonomies() {   
+// taxonomy service type is in here
+///more code more code more code blah blah blah
+}
+add_action( 'init', 'SP_PS_register_AtYourServices_taxonomies' );
+
+
+>> ASSISTANT: Here is how I would refactor the code:
+
+```
+// Custom Services Taxonomies
+function sp_ps_register_at_your_services_taxonomies() {
+
+    // Type of Service taxonomy
+    $labels = [
+        'name'              => 'Type of Services',
+        'singular_name'     => 'Type of Service',
+        'search_items'      => 'Search Types of Services',
+        'all_items'         => 'All Types of Services',
+        'parent_item'       => 'Parent Type of Service',
+        'parent_item_colon' => 'Parent Type of Service:',
+        'edit_item'         => 'Edit Type of Service',
+        'update_item'       => 'Update Type of Service',
+        'add_new_item'      => 'Add New Type of Service',
+        'new_item_name'     => 'New Type of Service Name',
+        'menu_name'         => 'Type of Service',
+    ];
+
+    $args = [
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => [ 'slug' => 'services' ],
+        'show_in_rest'      => true,
+    ];
+
+    register_taxonomy( 'service_type', ['services', 'page'], $args );
+}
+add_action( 'init', 'sp_ps_register_at_your_services_taxonomies' );
+```
+
+I renamed the function to have a more descriptive and lowercase name. I also used PHP array syntax and made sure there were no unnecessary curly braces or extra closing brackets.
+
+>> USER: working on my WordPress plugin
+what's going on here?
+Does this look correct?
+
+register_uninstall_hook( __FILE__, 'unregister_custom_post_type_on_init' );
+
+function unregister_custom_post_type_on_init() {
+  if (isset($wp_post_types['services'])) {
+    unregister_post_type( 'services' );
+    delete_site_option( 'rewrite_rules' );
+  }
+}
+
+add_action( 'init', 'unregister_custom_post_type_on_init', 100 );
+
+/*For the theme: Flush rewrite rules to add "services" as a permalink slug*/
+
+>> ASSISTANT: This code looks correct for unregistering a custom post type when a plugin is uninstalled. 
+
+The function `unregister_custom_post_type_on_init` is hooked to the `uninstall_hook` and will be run when the plugin is uninstalled. It first checks if the `services` post type is registered. If it is, it unregisters it using `unregister_post_type`. It then flushes the rewrite rules by deleting the `rewrite_rules` site option. Finally, the `unregister_custom_post_type_on_init` function is hooked to the `init` action with a priority of 100 to ensure that it runs after the custom post type has been registered.
+
+>> USER: working on my WordPress plugin
+ did I forget anything in my plugin?
+
+>> ASSISTANT: It is difficult for me to tell without more context. It looks like you have defined a function for unregistering a custom post type called "services" and have added an action to call that function during the "init" action.
+
+It is a good idea to also define a function for registering the custom post type, and to add an action to call that function during the "init" action as well. This will ensure that the custom post type is registered when the plugin is activated.
+
+It is also a good idea to include plugin metadata in the plugin header, such as the plugin name, version, and description. This can be done by adding a comment block at the top of the main plugin file with specific keywords, like "Plugin Name" and "Description".
+
+It is also a good practice to use the "wp_enqueue_scripts" action to enqueue any scripts or styles that the plugin needs, rather than including them directly in the plugin code.
+
+Additionally, you may want to consider adding user-facing functions that allow users to easily access and display the custom post type data on their site. This might include shortcodes, widgets, or template tags.
+
+>> USER: Do I still need to make a template for my custom post call " Services " to to display on the front end of the site?
+
+
+
+>> ASSISTANT: Yes, you will need to create a template for your custom post type to display on the front end of your site. You can do this by creating a single-services.php file in your theme and using the WordPress template hierarchy to display your custom post type. 
+
+To display the custom post type on your site, you will need to create a loop in your template file to retrieve the posts and display them. You can use the following code to create a basic loop:
+
+```
+<?php
+// Start the loop
+while ( have_posts() ) :
+    the_post();
+    // Your code to display the post content goes here
+endwhile; // End the loop
+?>
+```
+
+You can then use template tags like `the_title()`, `the_content()`, and `the_permalink()` to display the title, content, and permalink for each post in your custom post type. 
+
+You can also customize the look and feel of your custom post type by using WordPress functions and actions, such as `get_header()`, `get_footer()`, and `get_sidebar()` to include header, footer, and sidebar templates, as well as using custom styles and scripts to change the appearance of your custom post type.
+
+
+>> USER: I want to create a front in folder with my custom post type services in that folder along with the CSS and it's function file is this the correct approach
+
+>> ASSISTANT: Yes, it is correct to create a template file for your custom post type 'Services'. You can create a template file for your custom post type by creating a new file in your theme's folder and naming it `single-services.php`. 
+
+This template file will be used to display the content of individual 'Services' posts on the front-end of your site. You can also create a 'Services' archive template file by creating a new file in your theme's folder and naming it `archive-services.php`. This template file will be used to display a list of all 'Services' posts on the front-end of your site.
+
+In addition to creating these template files, you can also create a folder in your theme's folder specifically for the 'Services' custom post type. This folder can be named 'services' and can contain the template files for your 'Services' custom post type as well as any CSS and function files specific to the 'Services' custom post type. 
+
+This approach of creating a separate folder for your custom post type can help to keep your theme organized and make it easier to maintain.
+
+>> USER: And WordPress will still find these folders
+
+>> ASSISTANT: Yes, WordPress will still be able to find these files as long as they are located in the correct directory within your theme. If you create a folder for your custom post type within your theme, you can then create a template file within that folder to display the content for your "services" custom post type on the front-end of the site.
+
+For example, if you create a folder called "services" within your theme, you could create a template file called "single-services.php" to display a single instance of the "services" custom post type. You could also create an archive template file called "archive-services.php" to display a list of all the "services" custom post type on the front-end.
+
+In addition to these template files, you can also include any necessary CSS and function files within the "services" folder to style and add functionality to your custom post type.
+
+To make sure that WordPress is able to find these files, you will need to include the appropriate template tags in your theme's template files. For example, to display a single instance of the "services" custom post type, you would use the template tag `get_template_part( 'services/single', 'services' );` in your theme's template files. This will tell WordPress to look for the "single-services.php" template file within the "services" folder of your theme.
+
+I hope this helps! Let me know if you have any further questions.
+
+>> USER: What about blocks say I wanted to add a block to my custom post type I have to sit there and write a block for it wouldn't I
+
+>> ASSISTANT: Yes, you will need to create a custom block for your custom post type if you want to display it in the block editor (Gutenberg). This involves creating a JavaScript file that defines your block, and then enqueuing that file in your WordPress plugin or theme. 
+
+Here is an example of how you might do this in your plugin:
+
+1. Create a new folder in your plugin called `blocks`, and inside of it, create a new file called `services-block.js`. This is where you will define your block.
+
+2. In your `services-block.js` file, use the `wp.blocks` API to define your block. Here is an example of how you might do this:
+
+```
+wp.blocks.registerBlockType('my-plugin/services-block', {
+  title: 'Services Block',
+  icon: 'megaphone',
+  category: 'common',
+  attributes: {
+    title: {
+      type: 'string'
+    }
+  },
+  edit: function(props) {
+    return wp.element.createElement(
+      'p',
+      { className: props.className },
+      'Hello from the Services Block!'
+    );
+  },
+  save: function(props) {
+    return wp.element.createElement(
+      'p',
+      { className: props.className },
+      'Hello from the Services Block!'
+    );
+  }
+});
+```
+
+3. To enqueue your block file, you will need to use the `wp_enqueue_scripts` action hook in your plugin. Add the following code to your plugin file:
+
+```
+function my_plugin_enqueue_scripts() {
+  wp_enqueue_script(
+    'services-block',
+    plugin_dir_url( __FILE__ ) . 'blocks/services-block.js',
+    array( 'wp-blocks', 'wp-i18n', 'wp-element' )
+  );
+}
+add_action( 'wp_enqueue_
+
+>> USER: Working on my plugin for word press
+the add action (   '  "  ,  ' ' )
+I'm pretty sure it's supposed to have closing brackets and commas
+This doesn't look quite correct the attraction it's got a syntax error
+add_action( 'wp_enqueue_ 
+
+>> ASSISTANT: It looks like you are trying to enqueue a script or stylesheet in your plugin. To do this, you can use the `wp_enqueue_scripts` action hook and the `wp_enqueue_style` or `wp_enqueue_script` functions.
+
+Here's an example of how you can enqueue a stylesheet in your plugin:
+
+```
+function my_plugin_enqueue_style() {
+  wp_enqueue_style( 'my-plugin-style', plugin_dir_url( __FILE__ ) . 'css/style.css' );
+}
+add_action( 'wp_enqueue_scripts', 'my_plugin_enqueue_style' );
+```
+
+This will enqueue the `style.css` file located in the `css` folder of your plugin. The `plugin_dir_url` function retrieves the URL of your plugin directory, so you can use it to reference the path to your stylesheet.
+
+You can do something similar to enqueue a script:
+
+```
+function my_plugin_enqueue_script() {
+  wp_enqueue_script( 'my-plugin-script', plugin_dir_url( __FILE__ ) . 'js/script.js', array(), '1.0.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'my_plugin_enqueue_script' );
+```
+
+This will enqueue the `script.js` file located in the `js` folder of your plugin. The `array()` parameter specifies any dependencies the script has (e.g. other scripts it depends on), the `'1.0.0'` parameter specifies the version number of the script, and the `true`
+
+>> USER:     'services-block',
+    plugin_dir_url( __FILE__ ) . 'blocks/services-block.js',
+    array( 'wp-blocks', 'wp-i18n', 'wp-element' )
+I was actually trying to enqueue this block you seem to have lost the three to be a conversation
+try again how's it supposed to be coded correctly
+
+>> ASSISTANT: This block should be enqueued with the `wp_enqueue_scripts` action:
+
+```
+function enqueue_services_block_scripts() {
+    wp_enqueue_script(
+        'services-block',
+        plugin_dir_url( __FILE__ ) . 'blocks/services-block.js',
+        array( 'wp-blocks', 'wp-i18n', 'wp-element' )
+    );
+}
+add_action( 'wp_enqueue_scripts', 'enqueue_services_block_scripts' );
+```
+
+This will add the `services-block.js` file to the front-end of your website when the `wp_enqueue_scripts` action is fired. The `array` passed as the third argument are dependencies for your block, in this case `wp-blocks`, `wp-i18n`, and `wp-element`. These are core WordPress scripts that are required for your block to work properly.
+
+>> USER: Working on my WordPress plugin , in
+
+ PHP is part of conditions    ( isset (   )  ) 
+
+what does  actually mean?
+
+>> ASSISTANT: The `isset()` function is a built-in function in PHP that checks if a variable is set and is not `NULL`. It returns `true` if the variable is set, and `false` if it is not.
+
+For example, you can use `isset()` to check if a variable is set and not empty before using it in your code:
+
+```
+if (isset($some_variable)) {
+  // do something with $some_variable
+}
+```
+
+You can also use `isset()` to check if an element in an array is set:
+
+```
+if (isset($some_array['some_key'])) {
+  // do something with $some_array['some_key']
+}
+```
